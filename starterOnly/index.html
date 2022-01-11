@@ -59,31 +59,31 @@
           <form name="reserve" action="index.html" method="get" onsubmit="return checkForm(this);">
             <!-- Fist Name -->
             <div class="formData">
-              <label>Prénom</label><br>
-              <input class="text-control" type="text" id="firstName" name="firstName" minlength="2" /><br>
+              <label>Prénom*</label><br>
+              <input class="text-control" type="text" id="firstName" name="firstName" minlength="2" aria-required="true" /><br>
             </div>
             <!-- Last Name -->
             <div class="formData">
-              <label>Nom</label><br>
-              <input class="text-control" type="text" id="lastName" name="lastName" /><br>
+              <label>Nom*</label><br>
+              <input class="text-control" type="text" id="lastName" name="lastName" minlength="2" aria-required="true" /><br>
             </div>
             <!-- E-mail -->
             <div class="formData">
-              <label>E-mail</label><br>
-              <input class="text-control" type="email" id="email" name="email" /><br>
+              <label>E-mail*</label><br>
+              <input class="text-control" type="email" id="email" name="email" aria-required="true" /><br>
             </div>
             <!-- Birth Date -->
             <div class="formData">
-              <label>Date de naissance</label><br>
-              <input class="text-control" type="date" id="birthDate" name="birthDate" /><br>
+              <label>Date de naissance*</label><br>
+              <input class="text-control" type="date" id="birthDate" name="birthDate" aria-required="true" /><br>
             </div>
             <!-- Number of tournament -->
             <div class="formData">
               <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value=0 aria-required="true" />
             </div>
             <!-- City -->
-            <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
+            <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?*</p>
             <div class="formData">
               <input class="checkbox-input" type="radio" id="location1" name="location" value="New York" checked />
               <label class="checkbox-label" for="location1">
@@ -114,10 +114,10 @@
             <!-- Submit -->
             <div class="formData">
               <!-- TOS -->
-              <input class="checkbox-input" type="checkbox" id="tos" name="tos" />
-              <label class="checkbox2-label" for="tos" required>
+              <input class="checkbox-input" type="checkbox" id="tos" name="tos" aria-required="true"/>
+              <label class="checkbox2-label" for="tos">
                 <span class="checkbox-icon"></span>
-                J'ai lu et accepté les conditions d'utilisation.
+                J'ai lu et accepté les conditions d'utilisation.*
               </label>
               <br>
               <!-- Agreement of spam -->

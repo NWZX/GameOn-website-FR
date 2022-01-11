@@ -123,32 +123,41 @@ function checkForm(data) {
   const formData = transformData(data);
   
   if (formData.firstName.trim().length < 2) {
-    alert("First Name is too short");
-    return null;
+    data.firstName.parentElement.setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du prénom.");
+    data.firstName.parentElement.setAttribute("data-error-visible", "true");
+    data.firstName.addEventListener("focus", (e) => { data.firstName.parentElement.setAttribute("data-error-visible", "false"); });
   }
   if (formData.lastName.trim().length < 2) {
-    alert("Last Name is too short");
-    return null;
+    data.lastName.parentElement.setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du nom.");
+    data.lastName.parentElement.setAttribute("data-error-visible", "true");
+    data.lastName.addEventListener("focus", (e) => { data.lastName.parentElement.setAttribute("data-error-visible", "false"); });
   }
   if (regexEmail.test(formData.email) === false) {
-    alert("Email is not valid");
-    return null;
+    data.email.parentElement.setAttribute("data-error","Veuillez entrer une email valide.");
+    data.email.parentElement.setAttribute("data-error-visible", "true");
+    data.email.addEventListener("focus", (e) => { data.email.parentElement.setAttribute("data-error-visible", "false"); });
   }
   if (checkDate(formData.birthDate) === false || new Date(formData.birthDate) > new Date().getTime()) {
-    alert("Birth Date is not valid");
-    return null;
+    data.birthDate.parentElement.setAttribute("data-error","Vous devez entrer votre date de naissance");
+    data.birthDate.parentElement.setAttribute("data-error-visible", "true");
+    data.birthDate.addEventListener("focus", (e) => { data.birthDate.parentElement.setAttribute("data-error-visible", "false"); });
   }
   if (isInt(formData.quantity) === false) {
-    alert("Number of tournament is not valid");
-    return null;
+    data.quantity.parentElement.setAttribute("data-error","Veuillez entrer un entier valide.");
+    data.quantity.parentElement.setAttribute("data-error-visible", "true");
+    data.quantity.addEventListener("focus", (e) => { data.quantity.parentElement.setAttribute("data-error-visible", "false"); });
   }
   if (formData.location === "") {
-    alert("Location is not valid");
-    return null;
+    data.location.item(0).parentElement.setAttribute("data-error","Vous devez choisir une option.");
+    data.location.item(0).parentElement.setAttribute("data-error-visible", "true");
+    data.location.forEach((node) => {
+      node.addEventListener("change", (e) => { data.location.item(0).parentElement.setAttribute("data-error-visible", "false"); });
+    });
   }
   if (formData.tos === false) {
-    alert("You must agree to the terms of service");
-    return null;
+    data.tos.parentElement.setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions.");
+    data.tos.parentElement.setAttribute("data-error-visible", "true");
+    data.tos.addEventListener("focus", (e) => { data.tos.parentElement.setAttribute("data-error-visible", "false"); });
   }
 
   return { ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() };
