@@ -56,7 +56,11 @@
       <div class="content">
         <span class="close" onclick="closeModal()"></span>
         <div class="modal-body">
-          <form name="reserve" action="index.html" method="get" onsubmit="return checkForm(this);">
+          <div class="validation-box" id="validation-box">
+            Tu es <img alt="on" src="On.png" width="auto" height="auto" /><br/>
+            Ta réservation a été reçue 👊
+          </div>
+          <form name="reserve" action="javascript:void(0);" onsubmit="return checkForm(this);">
             <!-- Fist Name -->
             <div class="formData">
               <label>Prénom*</label><br>
@@ -129,7 +133,7 @@
               <br>
             </div>
             <!-- Go -->
-            <input class="btn-submit" type="submit" class="button" value="C'est parti" />
+            <input class="btn-submit" id="btn-submit" type="submit" class="button" value="C'est parti" />
           </form>
         </div>
       </div>
