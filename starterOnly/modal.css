@@ -149,7 +149,7 @@ main {
 .bground {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 3;
   left: 0;
   top: 0;
   height: 100%;
@@ -164,6 +164,7 @@ main {
 }
 
 .content {
+  bottom: unset;
   margin: 5% auto;
   width: 100%;
   max-width: 600px;
@@ -190,7 +191,7 @@ label {
   margin-bottom: 11px;
 }
 input {
-  padding: 8px;
+  padding: 0;
   border: 0.8px solid #ccc;
   outline: none;
 }
@@ -264,7 +265,15 @@ input[data-error]::after {
   opacity: 0;
 }
 .checkbox-input {
-  display: none;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.checkbox-input:focus + .checkbox-label .checkbox-icon::after {
+    background: #3876ac;
+}
+.checkbox-input:focus + .checkbox2-label .checkbox-icon {
+  background: #3876ac;
 }
 .checkbox-input:checked + .checkbox-label .checkbox-icon::after,
 .checkbox-input:checked + .checkbox2-label .checkbox-icon::after {
@@ -297,7 +306,7 @@ input[data-error]::after {
   width: 32px;
   height: 32px;
   opacity: 1;
-  cursor: pointer;
+  /* cursor: pointer; */
   transform: scale(0.7);
 }
 .close:before,
@@ -326,6 +335,9 @@ input[data-error]::after {
   color: #fff;
   cursor: pointer;
   border: 0;
+}
+.btn-submit:focus {
+  background: #ff3b52;
 }
 .btn-submit:disabled {
   background: #ccc;
@@ -475,6 +487,15 @@ footer {
   margin: 0 20px;
 }
 @media screen and (max-width: 1150px) {
+  .content {
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    height: 90vh;
+    overflow-y: scroll;
+    width: 100%;
+    max-width: 100%;
+  }
   .hero-section {
     display: block;
     box-shadow: unset;
@@ -585,16 +606,33 @@ footer {
 * The following styles are required for the validation messages to appear
 */
 
-.validation-box {
+.validation-body {
   text-align: center;
-  border-radius: 5px;
-  border: 2px solid #279e7a;
-  background-color: #279e7a;
-  display: none;
-  opacity: 0;
+  height: 95%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px 8%;
+  margin: 15px auto;
+  /* opacity: 0; */
   transition: 0.3s;
 }
-.validation-box[show="true"] {
-  display: block;
+.validation-body[show="true"] {
+  display: flex;
   opacity: 1;
+}
+.validation-body[show="false"] {
+  display: none;
+  opacity: 0;
+}
+.modal-body[show="true"] {
+  display: block;
+}
+.modal-body[show="false"] {
+  display: none;
+}
+
+@media screen and (min-width: 1150px) {
+  .validation-body {
+    min-height: 695px;
+  }
 }

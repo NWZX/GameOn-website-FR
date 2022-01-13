@@ -54,12 +54,16 @@
     <!-- Modal -->
     <div class="bground">
       <div class="content">
-        <span class="close" onclick="closeModal()"></span>
-        <div class="modal-body">
-          <div class="validation-box" id="validation-box">
-            Tu es <img alt="on" src="On.png" width="auto" height="auto" /><br/>
+        <span id="btn-close-top" class="close" onclick="closeModal()" onkeypress="closeModal()" tabindex="0"></span>
+        <div class="validation-body" id="validation-body" show="false">
+          <div>
+          </div>
+          <div >
             Ta réservation a été reçue 👊
           </div>
+          <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />
+        </div>
+        <div class="modal-body" id="modal-body" show="true">
           <form name="reserve" action="javascript:void(0);" onsubmit="return checkForm(this);">
             <!-- Fist Name -->
             <div class="formData">
@@ -84,7 +88,7 @@
             <!-- Number of tournament -->
             <div class="formData">
               <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value=0 aria-required="true" />
+              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value=0  aria-required="true" />
             </div>
             <!-- City -->
             <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?*</p>
@@ -109,7 +113,7 @@
               <label class="checkbox-label" for="location5">
                 <span class="checkbox-icon"></span>
                 Boston</label>
-              <input class="checkbox-input" type="radio" id="location6" name="location" value="Portland" />
+              <input class="checkbox-input" type="radio" id="location6" name="location" value="Portland"/>
               <label class="checkbox-label" for="location6">
                 <span class="checkbox-icon"></span>
                 Portland</label>
