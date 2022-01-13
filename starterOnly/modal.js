@@ -56,7 +56,10 @@ function launchModal() {
  */
 function closeModal() {
   modalbg.style.display = "none";
+  document.getElementById("modal-body").setAttribute("show", "true");
+  document.getElementById("validation-body").setAttribute("show", "false");
 }
+
 
 /**
  * Raw data from the form
@@ -169,8 +172,8 @@ function checkForm(data) {
   }
 
   if (isValid) {
-    document.getElementById("validation-box").setAttribute("show", "true");
-    document.getElementById("btn-submit").disabled = true;
+    document.getElementById("modal-body").setAttribute("show", "false");
+    document.getElementById("validation-body").setAttribute("show", "true");
   }
 
   return { ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() };
