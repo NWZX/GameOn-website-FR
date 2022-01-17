@@ -336,10 +336,13 @@ input[data-error]::after {
   cursor: pointer;
   border: 0;
 }
-.btn-submit:focus {
+.btn-submit:focus,
+.btn-signup:focus {
   background: #ff3b52;
+  border: 2px solid #000;
 }
-.btn-submit:disabled {
+.btn-submit:disabled,
+.btn-signup:disabled {
   background: #ccc;
 }
 /* custom select styles */
@@ -616,18 +619,18 @@ footer {
   /* opacity: 0; */
   transition: 0.3s;
 }
-.validation-body[show="true"] {
+.validation-body[data-show="true"] {
   display: flex;
   opacity: 1;
 }
-.validation-body[show="false"] {
+.validation-body[data-show="false"] {
   display: none;
   opacity: 0;
 }
-.modal-body[show="true"] {
+.modal-body[data-show="true"] {
   display: block;
 }
-.modal-body[show="false"] {
+.modal-body[data-show="false"] {
   display: none;
 }
 

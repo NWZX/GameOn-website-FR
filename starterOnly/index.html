@@ -55,15 +55,8 @@
     <div class="bground">
       <div class="content">
         <span id="btn-close-top" class="close" onclick="closeModal()" onkeypress="closeModal()" tabindex="0"></span>
-        <div class="validation-body" id="validation-body" show="false">
-          <div>
-          </div>
-          <div >
-            Merci pour votre réservation !
-          </div>
-          <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />
-        </div>
-        <div class="modal-body" id="modal-body" show="true">
+        
+        <div class="modal-body" id="modal-body" data-show="true">
           <!-- Change here to send data in a classical way -->
           <form id="reserve-form" name="reserve-form" action="javascript:void(0);">
             <!-- Fist Name -->
@@ -140,6 +133,14 @@
             <!-- Go -->
             <input class="btn-submit" id="btn-submit" type="submit" class="button" value="C'est parti" />
           </form>
+        </div>
+        <div class="validation-body" id="validation-body" data-show="false">
+          <div>
+          </div>
+          <div >
+            Merci pour votre réservation !
+          </div>
+          <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />
         </div>
       </div>
     </div>

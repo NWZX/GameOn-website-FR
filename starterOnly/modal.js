@@ -118,8 +118,8 @@ function isEmail(email) {
  * Show the validation success message
  */
 function showValidationMessage() {
-  document.getElementById("modal-body").setAttribute("show", "false");
-  document.getElementById("validation-body").setAttribute("show", "true");
+  document.getElementById("modal-body").setAttribute("data-show", "false");
+  document.getElementById("validation-body").setAttribute("data-show", "true");
 }
 
 /**
