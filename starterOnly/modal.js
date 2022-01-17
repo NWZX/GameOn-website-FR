@@ -12,54 +12,13 @@ function editNav() {
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 //#endregion
 
-//#region New/Improved
-/**
- * String is a integer
- * @param {string} value
- */
-function isInt(value) {
-  return !isNaN(value) &&
-    parseInt(Number(value)) == value &&
-    !isNaN(parseInt(value, 10));
-}
-
-/**
- * Check if it is a valid date
- */
-function checkDate(dateString) {
-  let date = new Date(dateString);
-  let value = date.valueOf();
-  if (value === 0) return true;
-  else return !!value;
-}
-
-// Global RegExp
-const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-
-/**
- * Open the modal
- */
-function launchModal() {
-  modalbg.style.display = "block";
-}
-
-/**
- * Close the modal by hidding the display
- */
-function closeModal() {
-  modalbg.style.display = "none";
-  document.getElementById("modal-body").setAttribute("show", "true");
-  document.getElementById("validation-body").setAttribute("show", "false");
-}
-
+//#region JSDoc Type
 
 /**
  * Raw data from the form
@@ -100,6 +59,29 @@ function closeModal() {
    * @property {boolean} spam
 */
 
+//#endregion
+
+//#region Utilitary functions
+/**
+ * String is a integer
+ * @param {string} value
+ */
+function isInt(value) {
+  return !isNaN(value) &&
+    parseInt(Number(value)) == value &&
+    !isNaN(parseInt(value, 10));
+}
+
+/**
+ * Check if it is a valid date
+ */
+function checkDate(dateString) {
+  let date = new Date(dateString);
+  let value = date.valueOf();
+  if (value === 0) return true;
+  else return !!value;
+}
+
 /**
  * Transform {@link FormDataSubmit} to {@link FormDataT}
  * @param {FormDataSubmit} data
@@ -118,64 +100,161 @@ function transformData(data) {
   }
 }
 
+/**
+ * Function that check if email is valid
+ * @param {string} email
+ */
+function isEmail(email) {
+  // Global RegExp for email validation
+  const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return regexEmail.test(email);
+}
+
+//#endregion
+
+//#region Modal Management
+
+/**
+ * Show the validation success message
+ */
+function showValidationMessage() {
+  document.getElementById("modal-body").setAttribute("show", "false");
+  document.getElementById("validation-body").setAttribute("show", "true");
+}
+
+/**
+ * Show the form
+ */
+function showForm() {
+  document.getElementById("modal-body").setAttribute("data-show", "true");
+  document.getElementById("validation-body").setAttribute("data-show", "false");
+}
+
+/**
+ * Open the modal
+ */
+function launchModal() {
+  modalbg.style.display = "block";
+}
+
+/**
+ * Close the modal by hidding the display
+ */
+function closeModal() {
+  modalbg.style.display = "none";
+  showForm();
+}
+
+//#endregion
+
+//#region Form Validation
+
+// Define Error messages
+
+const errorMessageFirstName = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
+const errorMessageLastName = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+const errorMessageEmail = "Veuillez entrer une adresse email valide.";
+const errorMessageBirthDate = "Veuillez entrer une date valide.";
+const errorMessageQuantity = "Veuillez entrer un nombre entier valide.";
+const errorMessageLocation = "Veuillez sélectionner une option.";
+const errorMessageTos = "Veuillez cocher la case pour accepter les conditions d'utilisation.";
+
+/**
+ * Show the validation error
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {string} errorMessage Message to display
+ * @param {boolean} [hide=true] Hide error on change
+ */
+function showError(inputElement, errorMessage, hide = true) {
+  inputElement.parentElement.setAttribute("data-error", errorMessage);
+  inputElement.parentElement.setAttribute("data-error-visible", "true");
+  hide && hideError(inputElement);
+}
+/**
+ * Hide the validation error
+ * @param {HTMLInputElement} inputElement Input element
+ */
+function hideError(inputElement) {
+  inputElement.addEventListener("focus", (e) => { inputElement.parentElement.setAttribute("data-error-visible", "false"); });
+}
+  
 /** 
  * Check data validity and transform it to {@link FormDataFinal}
  * @param {FormDataSubmit} data
  */
 function checkForm(data) {
   const formData = transformData(data);
-  const isValid = true;
+  let isValid = true;
   
   if (formData.firstName.trim().length < 2) {
-    data.firstName.parentElement.setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du prénom.");
-    data.firstName.parentElement.setAttribute("data-error-visible", "true");
-    data.firstName.addEventListener("focus", (e) => { data.firstName.parentElement.setAttribute("data-error-visible", "false"); });
+    showError(data.firstName, errorMessageFirstName);
     isValid = false;
   }
   if (formData.lastName.trim().length < 2) {
-    data.lastName.parentElement.setAttribute("data-error","Veuillez entrer 2 caractères ou plus pour le champ du nom.");
-    data.lastName.parentElement.setAttribute("data-error-visible", "true");
-    data.lastName.addEventListener("focus", (e) => { data.lastName.parentElement.setAttribute("data-error-visible", "false"); });
+    showError(data.lastName, errorMessageLastName);
     isValid = false;
   }
-  if (regexEmail.test(formData.email) === false) {
-    data.email.parentElement.setAttribute("data-error","Veuillez entrer une email valide.");
-    data.email.parentElement.setAttribute("data-error-visible", "true");
-    data.email.addEventListener("focus", (e) => { data.email.parentElement.setAttribute("data-error-visible", "false"); });
+  if (!isEmail(formData.email)) {
+    showError(data.email, errorMessageEmail);
     isValid = false;
   }
-  if (checkDate(formData.birthDate) === false || new Date(formData.birthDate) > new Date().getTime()) {
-    data.birthDate.parentElement.setAttribute("data-error","Vous devez entrer votre date de naissance");
-    data.birthDate.parentElement.setAttribute("data-error-visible", "true");
-    data.birthDate.addEventListener("focus", (e) => { data.birthDate.parentElement.setAttribute("data-error-visible", "false"); });
+  if (!checkDate(formData.birthDate) || new Date(formData.birthDate) > new Date().getTime()) {
+    showError(data.birthDate, errorMessageBirthDate);
     isValid = false;
   }
-  if (isInt(formData.quantity) === false) {
-    data.quantity.parentElement.setAttribute("data-error","Veuillez entrer un entier valide.");
-    data.quantity.parentElement.setAttribute("data-error-visible", "true");
-    data.quantity.addEventListener("focus", (e) => { data.quantity.parentElement.setAttribute("data-error-visible", "false"); });
+  if (!isInt(formData.quantity)) {
+    showError(data.quantity, errorMessageQuantity);
     isValid = false;
   }
   if (formData.location === "") {
-    data.location.item(0).parentElement.setAttribute("data-error","Vous devez choisir une option.");
-    data.location.item(0).parentElement.setAttribute("data-error-visible", "true");
+    showError(data.location.item(0), errorMessageLocation, false);
     data.location.forEach((node) => {
       node.addEventListener("change", (e) => { data.location.item(0).parentElement.setAttribute("data-error-visible", "false"); });
     });
     isValid = false;
   }
-  if (formData.tos === false) {
-    data.tos.parentElement.setAttribute("data-error","Vous devez vérifier que vous acceptez les termes et conditions.");
-    data.tos.parentElement.setAttribute("data-error-visible", "true");
+  if (!formData.tos) {
+    showError(data.tos, errorMessageTos, false);
     data.tos.addEventListener("change", (e) => { data.tos.parentElement.setAttribute("data-error-visible", "false"); });
     isValid = false;
   }
 
   if (isValid) {
-    document.getElementById("modal-body").setAttribute("show", "false");
-    document.getElementById("validation-body").setAttribute("show", "true");
+    showValidationMessage()
   }
 
-  return { ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() };
+  console.log({ ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() });
 }
+
+/**
+ * Add realtime validation to the input elements
+ * @param {HTMLInputElement} inputElement 
+ * @param {(text: string) => void} validator 
+ * @param {string} errorMessage 
+ */
+function addRealtimeValidation(inputElement, validator, errorMessage) {
+  inputElement.addEventListener("keyup", (e) => {
+    if (validator(e.target.value)) {
+      showError(e.target, errorMessage, false);
+    } else {
+      e.target.parentElement.setAttribute("data-error-visible", "false");
+    }
+  });
+}
+
+// Add realtime validation
+
+/**
+ * @type {FormDataSubmit & HTMLFormElement} reserveForm
+ */
+const reserveForm = document.getElementById("reserve-form");
+addRealtimeValidation(reserveForm.firstName, (value) => value.trim().length < 2, errorMessageFirstName);
+addRealtimeValidation(reserveForm.lastName, (value) => value.trim().length < 2, errorMessageLastName);
+addRealtimeValidation(reserveForm.email, (value) => !isEmail(value), errorMessageEmail);
+addRealtimeValidation(reserveForm.birthDate, (value) => !checkDate(value) || new Date(value) > new Date().getTime(), errorMessageBirthDate);
+addRealtimeValidation(reserveForm.quantity, (value) => !isInt(value), errorMessageQuantity);
+
+// Add validation on submit
+
+reserveForm.addEventListener("submit", (e) => { e.preventDefault(); checkForm(e.target); });
 //#endregion

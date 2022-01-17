@@ -64,7 +64,8 @@
           <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />
         </div>
         <div class="modal-body" id="modal-body" show="true">
-          <form name="reserve" action="javascript:void(0);" onsubmit="return checkForm(this);">
+          <!-- Change here to send data in a classical way -->
+          <form id="reserve-form" name="reserve-form" action="javascript:void(0);">
             <!-- Fist Name -->
             <div class="formData">
               <label for="firstName">Prénom*</label><br>
