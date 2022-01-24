@@ -82,11 +82,11 @@ function isInt(value) {
 /**
  * Check if it is a valid date
  */
-function checkDate(dateString) {
+function isValidDate(dateString) {
   let date = new Date(dateString);
   let value = date.valueOf();
   if (value === 0) return true;
-  else return !!value;
+  return !!value;
 }
 
 /**
@@ -167,6 +167,43 @@ const errorMessageLocation = "Veuillez sélectionner une option.";
 const errorMessageTos = "Veuillez cocher la case pour accepter les conditions d'utilisation.";
 
 /**
+ * Validator for the names field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateNameField(value) {
+  return value.trim().length > 2;
+}
+
+/**
+ * Validator for the email field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateEmailField(value) {
+  return isEmail(value);
+}
+
+/**
+ * Validator for the birthdate field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateDateField(value) {
+  return isValidDate(value) || new Date(value) > new Date().getTime();
+}
+
+/**
+ * Validator for the quantity field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateQuantityField(value) {
+  return isInt(value);
+}
+
+
+/**
  * Show the validation error
  * @param {HTMLInputElement} inputElement Input element
  * @param {string} errorMessage Message to display
@@ -182,9 +219,11 @@ function showError(inputElement, errorMessage, hide = true) {
  * @param {HTMLInputElement} inputElement Input element
  */
 function hideError(inputElement) {
-  inputElement.addEventListener("focus", (e) => { inputElement.parentElement.setAttribute("data-error-visible", "false"); });
+  inputElement.addEventListener("focus", (e) => {
+    inputElement.parentElement.setAttribute("data-error-visible", "false");
+  });
 }
-  
+
 /** 
  * Check data validity and transform it to {@link FormDataFinal}
  * @param {FormDataSubmit} data
@@ -192,37 +231,41 @@ function hideError(inputElement) {
 function checkForm(data) {
   const formData = transformData(data);
   let isValid = true;
-  
-  if (formData.firstName.trim().length < 2) {
+
+  if (!validateNameField(formData.firstName)) {
     showError(data.firstName, errorMessageFirstName);
     isValid = false;
   }
-  if (formData.lastName.trim().length < 2) {
+  if (!validateNameField(formData.lastName)) {
     showError(data.lastName, errorMessageLastName);
     isValid = false;
   }
-  if (!isEmail(formData.email)) {
+  if (!validateEmailField(formData.email)) {
     showError(data.email, errorMessageEmail);
     isValid = false;
   }
-  if (!checkDate(formData.birthDate) || new Date(formData.birthDate) > new Date().getTime()) {
+  if (!validateDateField(formData.birthDate)) {
     showError(data.birthDate, errorMessageBirthDate);
     isValid = false;
   }
-  if (!isInt(formData.quantity)) {
+  if (!validateQuantityField(formData.quantity)) {
     showError(data.quantity, errorMessageQuantity);
     isValid = false;
   }
   if (formData.location === "") {
     showError(data.location.item(0), errorMessageLocation, false);
     data.location.forEach((node) => {
-      node.addEventListener("change", (e) => { data.location.item(0).parentElement.setAttribute("data-error-visible", "false"); });
+      node.addEventListener("change", (e) => {
+        data.location.item(0).parentElement.setAttribute("data-error-visible", "false");
+      });
     });
     isValid = false;
   }
   if (!formData.tos) {
     showError(data.tos, errorMessageTos, false);
-    data.tos.addEventListener("change", (e) => { data.tos.parentElement.setAttribute("data-error-visible", "false"); });
+    data.tos.addEventListener("change", (e) => {
+      data.tos.parentElement.setAttribute("data-error-visible", "false");
+    });
     isValid = false;
   }
 
@@ -241,7 +284,7 @@ function checkForm(data) {
  */
 function addRealtimeValidation(inputElement, validator, errorMessage) {
   inputElement.addEventListener("keyup", (e) => {
-    if (validator(e.target.value)) {
+    if (!validator(e.target.value)) {
       showError(e.target, errorMessage, false);
     } else {
       e.target.parentElement.setAttribute("data-error-visible", "false");
@@ -251,15 +294,16 @@ function addRealtimeValidation(inputElement, validator, errorMessage) {
 
 // Add realtime validation
 
+
 /**
  * @type {FormDataSubmit & HTMLFormElement} reserveForm
  */
 const reserveForm = document.getElementById("reserve-form");
-addRealtimeValidation(reserveForm.firstName, (value) => value.trim().length < 2, errorMessageFirstName);
-addRealtimeValidation(reserveForm.lastName, (value) => value.trim().length < 2, errorMessageLastName);
-addRealtimeValidation(reserveForm.email, (value) => !isEmail(value), errorMessageEmail);
-addRealtimeValidation(reserveForm.birthDate, (value) => !checkDate(value) || new Date(value) > new Date().getTime(), errorMessageBirthDate);
-addRealtimeValidation(reserveForm.quantity, (value) => !isInt(value), errorMessageQuantity);
+addRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
+addRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
+addRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
+addRealtimeValidation(reserveForm.birthDate, validateDateField, errorMessageBirthDate);
+addRealtimeValidation(reserveForm.quantity, validateQuantityField, errorMessageQuantity);
 
 // Add validation on submit
 

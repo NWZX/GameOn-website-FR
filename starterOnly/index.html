@@ -55,19 +55,21 @@
     <div class="bground">
       <div class="content">
         <span id="btn-close-top" class="close" onclick="closeModal()" onkeypress="closeModal()" tabindex="0"></span>
-        
+
         <div class="modal-body" id="modal-body" data-show="true">
           <!-- Change here to send data in a classical way -->
           <form id="reserve-form" name="reserve-form" action="javascript:void(0);">
             <!-- Fist Name -->
             <div class="formData">
               <label for="firstName">Prénom*</label><br>
-              <input class="text-control" type="text" id="firstName" name="firstName" minlength="2" aria-required="true" /><br>
+              <input class="text-control" type="text" id="firstName" name="firstName" minlength="2"
+                aria-required="true" /><br>
             </div>
             <!-- Last Name -->
             <div class="formData">
               <label for="lastName">Nom*</label><br>
-              <input class="text-control" type="text" id="lastName" name="lastName" minlength="2" aria-required="true" /><br>
+              <input class="text-control" type="text" id="lastName" name="lastName" minlength="2"
+                aria-required="true" /><br>
             </div>
             <!-- E-mail -->
             <div class="formData">
@@ -82,41 +84,54 @@
             <!-- Number of tournament -->
             <div class="formData">
               <label for="quantity">À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value=0  aria-required="true" />
+              <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99" value=0
+                aria-required="true" />
             </div>
             <!-- City -->
-            <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?*</p>
-            <div class="formData">
-              <input class="checkbox-input" type="radio" id="location1" name="location" value="New York" checked />
-              <label class="checkbox-label" for="location1">
-                <span class="checkbox-icon"></span>
-                New York</label>
-              <input class="checkbox-input" type="radio" id="location2" name="location" value="San Francisco" />
-              <label class="checkbox-label" for="location2">
-                <span class="checkbox-icon"></span>
-                San Francisco</label>
-              <input class="checkbox-input" type="radio" id="location3" name="location" value="Seattle" />
-              <label class="checkbox-label" for="location3">
-                <span class="checkbox-icon"></span>
-                Seattle</label>
-              <input class="checkbox-input" type="radio" id="location4" name="location" value="Chicago" />
-              <label class="checkbox-label" for="location4">
-                <span class="checkbox-icon"></span>
-                Chicago</label>
-              <input class="checkbox-input" type="radio" id="location5" name="location" value="Boston" />
-              <label class="checkbox-label" for="location5">
-                <span class="checkbox-icon"></span>
-                Boston</label>
-              <input class="checkbox-input" type="radio" id="location6" name="location" value="Portland"/>
-              <label class="checkbox-label" for="location6">
-                <span class="checkbox-icon"></span>
-                Portland</label>
+            <p class="text-label">À quel tournoi souhaitez-vous participer cette année ?*</p>
+            <div class="formData radio-group">
+              <div>
+                <input class="checkbox-input" type="radio" id="location1" name="location" value="New York" checked />
+                <label class="checkbox-label" for="location1">
+                  <span class="checkbox-icon"></span>
+                  New York</label>
+              </div>
+              <div>
+                <input class="checkbox-input" type="radio" id="location2" name="location" value="San Francisco" />
+                <label class="checkbox-label" for="location2">
+                  <span class="checkbox-icon"></span>
+                  San Francisco</label>
+              </div>
+              <div>
+                <input class="checkbox-input" type="radio" id="location3" name="location" value="Seattle" />
+                <label class="checkbox-label" for="location3">
+                  <span class="checkbox-icon"></span>
+                  Seattle</label>
+              </div>
+              <div>
+                <input class="checkbox-input" type="radio" id="location4" name="location" value="Chicago" />
+                <label class="checkbox-label" for="location4">
+                  <span class="checkbox-icon"></span>
+                  Chicago</label>
+              </div>
+              <div>
+                <input class="checkbox-input" type="radio" id="location5" name="location" value="Boston" />
+                <label class="checkbox-label" for="location5">
+                  <span class="checkbox-icon"></span>
+                  Boston</label>
+              </div>
+              <div>
+                <input class="checkbox-input" type="radio" id="location6" name="location" value="Portland" />
+                <label class="checkbox-label" for="location6">
+                  <span class="checkbox-icon"></span>
+                  Portland</label>
+              </div>
             </div>
 
             <!-- Submit -->
             <div class="formData">
               <!-- TOS -->
-              <input class="checkbox-input" type="checkbox" id="tos" name="tos" aria-required="true"/>
+              <input class="checkbox-input" type="checkbox" id="tos" name="tos" aria-required="true" />
               <label class="checkbox2-label" for="tos">
                 <span class="checkbox-icon"></span>
                 J'ai lu et accepté les conditions d'utilisation.*
@@ -137,7 +152,7 @@
         <div class="validation-body" id="validation-body" data-show="false">
           <div>
           </div>
-          <div >
+          <div>
             Merci pour votre réservation !
           </div>
           <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />

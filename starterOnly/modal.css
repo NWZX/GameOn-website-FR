@@ -1,5 +1,5 @@
 :root {
-  --font-default: "DM Sans", Arial, Helvetica, sans-serif;
+  --font-default: 'DM Sans', Arial, Helvetica, sans-serif;
   --font-slab: var(--font-default);
   --modal-duration: 0.8s;
 }
@@ -14,7 +14,7 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
-  background-image: url("background.png");
+  background-image: url('background.png');
   font-family: var(--font-default);
   font-size: 18px;
   max-width: 1300px;
@@ -35,10 +35,10 @@ img {
   margin: 3.5%;
 }
 .header-logo {
-    float: left;
+  float: left;
 }
 .main-navbar {
-    float: right;
+  float: right;
 }
 .topnav a {
   float: left;
@@ -69,7 +69,9 @@ img {
 }
 
 @media screen and (max-width: 1150px) {
-  .topnav a {display: none;}
+  .topnav a {
+    display: none;
+  }
   .topnav a.icon {
     float: right;
     display: block;
@@ -77,7 +79,9 @@ img {
 }
 
 @media screen and (max-width: 1150px) {
-  .topnav.responsive {position: relative;}
+  .topnav.responsive {
+    position: relative;
+  }
   .topnav.responsive .icon {
     position: absolute;
     right: 0;
@@ -97,11 +101,9 @@ main {
   padding-top: 0.5vw;
   padding-left: 2vw;
   padding-right: 2vw;
-  margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
   width: 100%;
-
 }
 
 .modal-btn {
@@ -215,10 +217,10 @@ input {
   opacity: 0;
   transition: 0.3s;
 }
-.formData[data-error-visible="true"]::after {
+.formData[data-error-visible='true']::after {
   opacity: 1;
 }
-.formData[data-error-visible="true"] .text-control {
+.formData[data-error-visible='true'] .text-control {
   border: 2px solid #e54858;
 }
 /* 
@@ -230,7 +232,7 @@ input[data-error]::after {
 .checkbox-label,
 .checkbox2-label {
   position: relative;
-  margin-left: 36px;
+  /* margin-left: 36px; */
   font-size: 12px;
   font-weight: normal;
 }
@@ -250,7 +252,7 @@ input[data-error]::after {
 }
 .checkbox-label .checkbox-icon::after,
 .checkbox2-label .checkbox-icon::after {
-  content: "";
+  content: '';
   width: 13px;
   height: 13px;
   background-color: #279e7a;
@@ -264,13 +266,18 @@ input[data-error]::after {
   transition: 0.3s;
   opacity: 0;
 }
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
 .checkbox-input {
+  margin-left: 20px;
   opacity: 0;
   width: 0;
   height: 0;
 }
 .checkbox-input:focus + .checkbox-label .checkbox-icon::after {
-    background: #3876ac;
+  background: #3876ac;
 }
 .checkbox-input:focus + .checkbox2-label .checkbox-icon {
   background: #3876ac;
@@ -313,7 +320,7 @@ input[data-error]::after {
 .close:after {
   position: absolute;
   left: 15px;
-  content: " ";
+  content: ' ';
   height: 33px;
   width: 3px;
   background-color: #fff;
@@ -363,7 +370,7 @@ input[data-error]::after {
 /* Style the arrow inside the select element: */
 .select-selected:after {
   position: absolute;
-  content: "";
+  content: '';
   top: 10px;
   right: 13px;
   width: 11px;
@@ -413,6 +420,7 @@ input[data-error]::after {
 }
 /* custom select end */
 .text-label {
+  padding-left: 0;
   font-weight: normal;
   font-size: 16px;
 }
@@ -434,7 +442,7 @@ input[data-error]::after {
   text-align: left;
 }
 .hero-content::after {
-  content: "";
+  content: '';
   width: 100%;
   height: 100%;
   background: #232323;
@@ -518,10 +526,12 @@ footer {
     width: 100%;
     font-size: 4.5rem;
     white-space: normal;
+    text-align: justify;
   }
   .hero-text {
     width: 90%;
     font-size: 1.5rem;
+    text-align: justify;
   }
   .hero-img img {
     border-radius: 10px;
@@ -537,8 +547,8 @@ footer {
     text-align: center;
   }
 }
- @media screen and (max-width: 540px) {
-   main {
+@media screen and (max-width: 540px) {
+  main {
     font-size: 130%;
     font-weight: bolder;
     color: black;
@@ -550,50 +560,66 @@ footer {
     text-align: justify;
     width: 100%;
   }
-
+  .hero-section {
+    min-height: unset;
+  }
   .hero-headline {
     width: 100%;
-    font-size: 3.5rem;
-    text-align: center;
+    font-size: 2.4rem;
+    text-align: justify;
+    font-weight: 600;
   }
   .hero-text {
     width: 100%;
-    text-align: center;
+    text-align: justify;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  .topnav.responsive .header-logo {
+    display: block;
+    margin-top: 7%;
   }
   .header-logo {
-    width: 100%;
+    display: flex;
   }
   .main-navbar {
     width: 100%;
   }
   .header-logo img {
+    width: 80%;
+    margin: auto;
+  }
+  .hero-img {
     width: 100%;
+    padding: 20px;
   }
-
-  .topnav.responsive a{
-    text-align: center;
+  .topnav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
-  .topnav a {display: none;}
-  .topnav a.icon {
-    background-color: #ff0000;
-    border-radius: 15px;
-    float: none;
-    display: block;
+  .radio-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
-  .topnav.responsive .icon {
-    position: relative;
-    right: 0;
-    top: 0;
+}
+@media screen and (max-width: 400px) {
+  .checkbox-label,
+  .checkbox2-label {
+    width: 80%;
   }
-} 
- @media screen and (max-width: 340px) {
+  .radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 340px) {
   .hero-headline {
     font-size: 2.75rem;
   }
   .hero-text {
     font-size: 1.25rem;
   }
-} 
+}
 
 @keyframes modalopen {
   from {
@@ -619,18 +645,18 @@ footer {
   /* opacity: 0; */
   transition: 0.3s;
 }
-.validation-body[data-show="true"] {
+.validation-body[data-show='true'] {
   display: flex;
   opacity: 1;
 }
-.validation-body[data-show="false"] {
+.validation-body[data-show='false'] {
   display: none;
   opacity: 0;
 }
-.modal-body[data-show="true"] {
+.modal-body[data-show='true'] {
   display: block;
 }
-.modal-body[data-show="false"] {
+.modal-body[data-show='false'] {
   display: none;
 }
 
