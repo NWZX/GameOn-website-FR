@@ -54,7 +54,7 @@
     <!-- Modal -->
     <div class="bground">
       <div class="content">
-        <span id="btn-close-top" class="close" onclick="closeModal()" onkeypress="closeModal()" tabindex="0"></span>
+        <span id="btn-close-top" class="close" tabindex="0"></span>
 
         <div class="modal-body" id="modal-body" data-show="true">
           <!-- Change here to send data in a classical way -->
@@ -155,7 +155,7 @@
           <div>
             Merci pour votre réservation !
           </div>
-          <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" onclick="closeModal()" />
+          <input class="btn-submit" id="btn-close" type="button" class="button" value="Fermer" />
         </div>
       </div>
     </div>
@@ -165,7 +165,7 @@
       Copyright 2014 - 2022, GameOn Inc.
     </p>
   </footer>
-  <script src="modal.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 
 </html>

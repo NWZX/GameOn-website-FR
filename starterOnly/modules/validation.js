@@ -1,22 +1,5 @@
-
-//#region Leagacy
-function editNav() {
-  var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
-
-// DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-
-//#endregion
+import { isEmail, isInt, isValidDate } from "./utility.js";
+import { showValidationMessage } from "./modal.js";
 
 //#region JSDoc Type
 
@@ -66,28 +49,6 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
  * @returns {boolean}
  */
 
-//#endregion
-
-//#region Utilitary functions
-/**
- * String is a integer
- * @param {string} value
- */
-function isInt(value) {
-  return !isNaN(value) &&
-    parseInt(Number(value)) == value &&
-    !isNaN(parseInt(value, 10));
-}
-
-/**
- * Check if it is a valid date
- */
-function isValidDate(dateString) {
-  let date = new Date(dateString);
-  let value = date.valueOf();
-  if (value === 0) return true;
-  return !!value;
-}
 
 /**
  * Transform {@link FormDataSubmit} to {@link FormDataT}
@@ -105,51 +66,6 @@ function transformData(data) {
     spam: data.spam.checked,
     location: data.location.value
   }
-}
-
-/**
- * Function that check if email is valid
- * @param {string} email
- */
-function isEmail(email) {
-  // Global RegExp for email validation
-  const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regexEmail.test(email);
-}
-
-//#endregion
-
-//#region Modal Management
-
-/**
- * Show the validation success message
- */
-function showValidationMessage() {
-  document.getElementById("modal-body").setAttribute("data-show", "false");
-  document.getElementById("validation-body").setAttribute("data-show", "true");
-}
-
-/**
- * Show the form
- */
-function showForm() {
-  document.getElementById("modal-body").setAttribute("data-show", "true");
-  document.getElementById("validation-body").setAttribute("data-show", "false");
-}
-
-/**
- * Open the modal
- */
-function launchModal() {
-  modalbg.style.display = "block";
-}
-
-/**
- * Close the modal by hidding the display
- */
-function closeModal() {
-  modalbg.style.display = "none";
-  showForm();
 }
 
 //#endregion
@@ -224,57 +140,54 @@ function hideError(inputElement) {
   });
 }
 
-/** 
- * Check data validity and transform it to {@link FormDataFinal}
- * @param {FormDataSubmit} data
+/**
+ * Validation for text input elements
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {validatorCallback} validator Callback to validate the input
+ * @param {string} errorMessage Error message to display
  */
-function checkForm(data) {
-  const formData = transformData(data);
-  let isValid = true;
+function textInputValidation(inputElement, validator, errorMessage) {
+    if (!validator(inputElement.value)) {
+      showError(inputElement, errorMessage);
+      return false;
+    }
+  return true;
+}
 
-  if (!validateNameField(formData.firstName)) {
-    showError(data.firstName, errorMessageFirstName);
-    isValid = false;
-  }
-  if (!validateNameField(formData.lastName)) {
-    showError(data.lastName, errorMessageLastName);
-    isValid = false;
-  }
-  if (!validateEmailField(formData.email)) {
-    showError(data.email, errorMessageEmail);
-    isValid = false;
-  }
-  if (!validateDateField(formData.birthDate)) {
-    showError(data.birthDate, errorMessageBirthDate);
-    isValid = false;
-  }
-  if (!validateQuantityField(formData.quantity)) {
-    showError(data.quantity, errorMessageQuantity);
-    isValid = false;
-  }
-  if (formData.location === "") {
-    showError(data.location.item(0), errorMessageLocation, false);
-    data.location.forEach((node) => {
+/**
+ * Validation for radio input elements
+ * @param {RadioNodeList} inputElement Input element
+ * @param {string} errorMessage Error message to display
+ */
+function radioInputValidation(inputElement, errorMessage) {
+  if (inputElement.value === "") {
+    showError(inputElement.item(0), errorMessage, false);
+    inputElement.forEach((node) => {
       node.addEventListener("change", (e) => {
-        data.location.item(0).parentElement.setAttribute("data-error-visible", "false");
+        inputElement.item(0).parentElement.setAttribute("data-error-visible", "false");
       });
     });
-    isValid = false;
+    return false;
   }
-  if (!formData.tos) {
-    showError(data.tos, errorMessageTos, false);
-    data.tos.addEventListener("change", (e) => {
-      data.tos.parentElement.setAttribute("data-error-visible", "false");
-    });
-    isValid = false;
-  }
-
-  if (isValid) {
-    showValidationMessage()
-  }
-
-  console.log({ ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() });
+  return true;
 }
+
+/**
+ * Validation for checkbox input elements
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {string} errorMessage Error message to display
+ */
+function checkboxInputValidation(inputElement, errorMessage) {
+    if (!inputElement.checked) {
+      showError(inputElement, errorMessage, false);
+      inputElement.addEventListener("change", (e) => {
+        inputElement.parentElement.setAttribute("data-error-visible", "false");
+      });
+      return false;
+    }
+  return true;
+}
+
 
 /**
  * Add realtime validation to the input elements
@@ -282,7 +195,7 @@ function checkForm(data) {
  * @param {validatorCallback} validator Callback to validate the input
  * @param {string} errorMessage Error message to display
  */
-function addRealtimeValidation(inputElement, validator, errorMessage) {
+function textInputRealtimeValidation(inputElement, validator, errorMessage) {
   inputElement.addEventListener("keyup", (e) => {
     if (!validator(e.target.value)) {
       showError(e.target, errorMessage, false);
@@ -292,20 +205,37 @@ function addRealtimeValidation(inputElement, validator, errorMessage) {
   });
 }
 
-// Add realtime validation
-
+/** 
+ * Check data validity and transform it to {@link FormDataFinal}
+ * @param {FormDataSubmit} data
+ */
+export function checkForm(data) {
+  let isValid = true;
+  
+  isValid = isValid && textInputValidation(data.firstName, validateNameField, errorMessageFirstName);
+  isValid = isValid && textInputValidation(data.lastName, validateNameField, errorMessageLastName);
+  isValid = isValid && textInputValidation(data.email, validateEmailField, errorMessageEmail);
+  isValid = isValid && textInputValidation(data.birthDate, validateDateField, errorMessageBirthDate);
+  isValid = isValid && textInputValidation(data.quantity, validateQuantityField, errorMessageQuantity);
+  isValid = isValid && radioInputValidation(data.location, errorMessageLocation);
+  isValid = isValid && checkboxInputValidation(data.tos, errorMessageTos);
+  
+  isValid && showValidationMessage()
+  
+  
+  const formData = transformData(data);
+  console.log({ ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() });
+}
 
 /**
- * @type {FormDataSubmit & HTMLFormElement} reserveForm
+ * Check data validity (but only visualy)
+ * @param {FormDataSubmit & HTMLFormElement} reserveForm 
  */
-const reserveForm = document.getElementById("reserve-form");
-addRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
-addRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
-addRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
-addRealtimeValidation(reserveForm.birthDate, validateDateField, errorMessageBirthDate);
-addRealtimeValidation(reserveForm.quantity, validateQuantityField, errorMessageQuantity);
-
-// Add validation on submit
-
-reserveForm.addEventListener("submit", (e) => { e.preventDefault(); checkForm(e.target); });
+export function checkFormRealtime(reserveForm) {
+  textInputRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
+  textInputRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
+  textInputRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
+  textInputRealtimeValidation(reserveForm.birthDate, validateDateField, errorMessageBirthDate);
+  textInputRealtimeValidation(reserveForm.quantity, validateQuantityField, errorMessageQuantity);
+}
 //#endregion

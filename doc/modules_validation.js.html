@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: modules/validation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: modules/validation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { isEmail, isInt, isValidDate } from "./utility.js";
+import { showValidationMessage, showForm } from "./modal.js";
+
+//#region JSDoc Type
+
+/**
+ * Raw data from the form
+   * @typedef {Object} FormDataSubmit
+   * @property {HTMLInputElement} firstName
+   * @property {HTMLInputElement} lastName
+   * @property {HTMLInputElement} email
+   * @property {HTMLInputElement} birthDate
+   * @property {HTMLInputElement} quantity
+   * @property {RadioNodeList} location
+   * @property {HTMLInputElement} tos
+   * @property {HTMLInputElement} spam
+*/
+
+/**
+ * Data after cleaning
+   * @typedef {Object} FormDataT
+   * @property {string} firstName
+   * @property {string} lastName
+   * @property {string} email
+   * @property {string} birthDate
+   * @property {string} quantity
+   * @property {string} location
+   * @property {boolean} tos
+   * @property {boolean} spam
+*/
+
+/**
+ * Final data after validation
+   * @typedef {Object} FormDataFinal
+   * @property {string} firstName
+   * @property {string} lastName
+   * @property {string} email
+   * @property {number} birthDate
+   * @property {number} quantity
+   * @property {string} location
+   * @property {boolean} tos
+   * @property {boolean} spam
+*/
+
+/**
+ * Check if the input can tigger the error
+ * @callback validatorCallback
+ * @param {string} text Input text
+ * @returns {boolean}
+ */
+
+
+/**
+ * Transform {@link FormDataSubmit} to {@link FormDataT}
+ * @param {FormDataSubmit} data
+ * @returns {FormDataT}
+ */
+function transformData(data) {
+  return {
+    firstName: data.firstName.value,
+    lastName: data.lastName.value,
+    email: data.email.value,
+    birthDate: data.birthDate.value,
+    quantity: data.quantity.value,
+    tos: data.tos.checked,
+    spam: data.spam.checked,
+    location: data.location.value
+  }
+}
+
+//#endregion
+
+//#region Form Validation
+
+// Define Error messages
+
+const errorMessageFirstName = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
+const errorMessageLastName = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+const errorMessageEmail = "Veuillez entrer une adresse email valide.";
+const errorMessageBirthDate = "Veuillez entrer une date valide.";
+const errorMessageQuantity = "Veuillez entrer un nombre entier valide.";
+const errorMessageLocation = "Veuillez sélectionner une option.";
+const errorMessageTos = "Veuillez cocher la case pour accepter les conditions d'utilisation.";
+
+/**
+ * Validator for the names field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateNameField(value) {
+  return value.trim().length > 2;
+}
+
+/**
+ * Validator for the email field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateEmailField(value) {
+  return isEmail(value);
+}
+
+/**
+ * Validator for the birthdate field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateDateField(value) {
+  return isValidDate(value) || new Date(value) > new Date().getTime();
+}
+
+/**
+ * Validator for the quantity field
+ * @param {string} value 
+ * @returns {boolean}
+ */
+function validateQuantityField(value) {
+  return isInt(value);
+}
+
+
+/**
+ * Show the validation error
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {string} errorMessage Message to display
+ * @param {boolean} [hide=true] Hide error on change
+ */
+function showError(inputElement, errorMessage, hide = true) {
+  inputElement.parentElement.setAttribute("data-error", errorMessage);
+  inputElement.parentElement.setAttribute("data-error-visible", "true");
+  hide &amp;&amp; hideError(inputElement);
+}
+/**
+ * Hide the validation error
+ * @param {HTMLInputElement} inputElement Input element
+ */
+function hideError(inputElement) {
+  inputElement.addEventListener("focus", (e) => {
+    inputElement.parentElement.setAttribute("data-error-visible", "false");
+  });
+}
+
+/**
+ * Validation for text input elements
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {validatorCallback} validator Callback to validate the input
+ * @param {string} errorMessage Error message to display
+ */
+function textInputValidation(inputElement, validator, errorMessage) {
+    if (!validator(inputElement.value)) {
+      showError(inputElement, errorMessage);
+      return false;
+    }
+  return true;
+}
+
+/**
+ * Validation for radio input elements
+ * @param {RadioNodeList} inputElement Input element
+ * @param {string} errorMessage Error message to display
+ */
+function radioInputValidation(inputElement, errorMessage) {
+  if (inputElement.value === "") {
+    showError(inputElement.item(0), errorMessage, false);
+    inputElement.forEach((node) => {
+      node.addEventListener("change", (e) => {
+        inputElement.item(0).parentElement.setAttribute("data-error-visible", "false");
+      });
+    });
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Validation for checkbox input elements
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {string} errorMessage Error message to display
+ */
+function checkboxInputValidation(inputElement, errorMessage) {
+    if (!inputElement.checked) {
+      showError(inputElement, errorMessage, false);
+      inputElement.addEventListener("change", (e) => {
+        inputElement.parentElement.setAttribute("data-error-visible", "false");
+      });
+      return false;
+    }
+  return true;
+}
+
+
+/**
+ * Add realtime validation to the input elements
+ * @param {HTMLInputElement} inputElement Input element
+ * @param {validatorCallback} validator Callback to validate the input
+ * @param {string} errorMessage Error message to display
+ */
+function textInputRealtimeValidation(inputElement, validator, errorMessage) {
+  inputElement.addEventListener("keyup", (e) => {
+    if (!validator(e.target.value)) {
+      showError(e.target, errorMessage, false);
+    } else {
+      e.target.parentElement.setAttribute("data-error-visible", "false");
+    }
+  });
+}
+
+/** 
+ * Check data validity and transform it to {@link FormDataFinal}
+ * @param {FormDataSubmit} data
+ */
+export function checkForm(data) {
+  let isValid = true;
+  
+  isValid = isValid &amp;&amp; textInputValidation(data.firstName, validateNameField, errorMessageFirstName);
+  isValid = isValid &amp;&amp; textInputValidation(data.lastName, validateNameField, errorMessageLastName);
+  isValid = isValid &amp;&amp; textInputValidation(data.email, validateEmailField, errorMessageEmail);
+  isValid = isValid &amp;&amp; textInputValidation(data.birthDate, validateDateField, errorMessageBirthDate);
+  isValid = isValid &amp;&amp; textInputValidation(data.quantity, validateQuantityField, errorMessageQuantity);
+  isValid = isValid &amp;&amp; radioInputValidation(data.location, errorMessageLocation);
+  isValid = isValid &amp;&amp; checkboxInputValidation(data.tos, errorMessageTos);
+  
+  isValid &amp;&amp; showValidationMessage()
+  
+  
+  const formData = transformData(data);
+  console.log({ ...formData, quantity: parseInt(formData.quantity), birthDate: new Date(formData.birthDate).getTime() });
+}
+
+/**
+ * Check data validity (but only visualy)
+ * @param {FormDataSubmit &amp; HTMLFormElement} reserveForm 
+ */
+export function checkFormRealtime(reserveForm) {
+  textInputRealtimeValidation(reserveForm.firstName, validateNameField, errorMessageFirstName);
+  textInputRealtimeValidation(reserveForm.lastName, validateNameField, errorMessageLastName);
+  textInputRealtimeValidation(reserveForm.email, validateEmailField, errorMessageEmail);
+  textInputRealtimeValidation(reserveForm.birthDate, validateDateField, errorMessageBirthDate);
+  textInputRealtimeValidation(reserveForm.quantity, validateQuantityField, errorMessageQuantity);
+}
+//#endregion</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#checkboxInputValidation">checkboxInputValidation</a></li><li><a href="global.html#checkForm">checkForm</a></li><li><a href="global.html#checkFormRealtime">checkFormRealtime</a></li><li><a href="global.html#closeModal">closeModal</a></li><li><a href="global.html#hideError">hideError</a></li><li><a href="global.html#isEmail">isEmail</a></li><li><a href="global.html#isInt">isInt</a></li><li><a href="global.html#isValidDate">isValidDate</a></li><li><a href="global.html#launchModal">launchModal</a></li><li><a href="global.html#radioInputValidation">radioInputValidation</a></li><li><a href="global.html#reserveForm">reserveForm</a></li><li><a href="global.html#showError">showError</a></li><li><a href="global.html#showForm">showForm</a></li><li><a href="global.html#showValidationMessage">showValidationMessage</a></li><li><a href="global.html#textInputRealtimeValidation">textInputRealtimeValidation</a></li><li><a href="global.html#textInputValidation">textInputValidation</a></li><li><a href="global.html#transformData">transformData</a></li><li><a href="global.html#validateDateField">validateDateField</a></li><li><a href="global.html#validateEmailField">validateEmailField</a></li><li><a href="global.html#validateNameField">validateNameField</a></li><li><a href="global.html#validateQuantityField">validateQuantityField</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jan 24 2022 10:13:18 GMT-0400 (Bolivia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

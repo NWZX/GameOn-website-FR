@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: modules/modal.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,56 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: modules/modal.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+//#region Modal Management
 
+const modalbg = document.querySelector(".bground");
 
-    <h3> </h3>
+/**
+ * Show the validation success message
+ */
+export function showValidationMessage() {
+  document.getElementById("modal-body").setAttribute("data-show", "false");
+  document.getElementById("validation-body").setAttribute("data-show", "true");
+}
 
+/**
+ * Show the form
+ */
+export function showForm() {
+  document.getElementById("modal-body").setAttribute("data-show", "true");
+  document.getElementById("validation-body").setAttribute("data-show", "false");
+}
 
+/**
+ * Open the modal
+ */
+export function launchModal() {
+  modalbg.style.display = "block";
+}
 
+/**
+ * Close the modal by hidding the display
+ */
+export function closeModal() {
+  modalbg.style.display = "none";
+  showForm();
+}
 
+//#endregion
 
-
-
-
-
-
-    
-
-
-
-
-
+</code></pre>
+        </article>
+    </section>
 
 
 
