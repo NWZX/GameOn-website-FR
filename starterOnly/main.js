@@ -21,7 +21,7 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 
 document.getElementById("btn-close-top").addEventListener("click", closeModal);
-document.getElementById("btn-close-top").addEventListener("keypress", closeModal);
+document.getElementById("btn-close-top").addEventListener("keypress", (e) => { e.key === 'Enter' && closeModal() });
 document.getElementById("btn-close").addEventListener("click", closeModal);
 
 
