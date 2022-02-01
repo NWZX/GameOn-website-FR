@@ -88,7 +88,7 @@ const errorMessageTos = "Veuillez cocher la case pour accepter les conditions d'
  * @returns {boolean}
  */
 function validateNameField(value) {
-  return value.trim().length > 2;
+  return value.trim().length > 1;
 }
 
 /**
@@ -161,7 +161,7 @@ function textInputValidation(inputElement, validator, errorMessage) {
  */
 function radioInputValidation(inputElement, errorMessage) {
   if (inputElement.value === "") {
-    showError(inputElement.item(0), errorMessage, false);
+    showError(inputElement.item(0).parentElement, errorMessage, false);
     inputElement.forEach((node) => {
       node.addEventListener("change", (e) => {
         inputElement.item(0).parentElement.setAttribute("data-error-visible", "false");

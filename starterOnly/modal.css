@@ -216,6 +216,10 @@ input {
   opacity: 0;
   transition: 0.3s;
 }
+.radio-group.formData[data-error]::after {
+  grid-row: 4;
+  grid-column: 1 / span 4;
+}
 .formData[data-error-visible='true']::after {
   opacity: 1;
 }
@@ -439,6 +443,7 @@ input[data-error]::after {
   color: #fff;
   position: relative;
   text-align: left;
+  width: -moz-available;
 }
 .hero-content::after {
   content: '';
