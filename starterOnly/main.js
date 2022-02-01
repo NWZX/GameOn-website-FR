@@ -10,6 +10,7 @@ function editNav() {
     x.className = "topnav";
   }
 }
+document.getElementById("nav-icon").addEventListener("click", editNav);
 
 // DOM Elements
 const modalBtn = document.querySelectorAll(".modal-btn");
